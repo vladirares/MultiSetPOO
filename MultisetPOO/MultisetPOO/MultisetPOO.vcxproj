@@ -147,12 +147,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="Comparator.cpp" />
+    <ClCompile Include="Element.cpp" />
     <ClCompile Include="Multiset.cpp" />
     <ClCompile Include="MultisetPOO.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bucket.h" />
     <ClInclude Include="Comparator.h" />
+    <ClInclude Include="Element.h" />
     <ClInclude Include="Multiset.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
