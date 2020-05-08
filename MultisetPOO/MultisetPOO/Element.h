@@ -15,7 +15,7 @@ public:
 	Element(T);
 	void setInfo(T);
 	T getInfo()const;
-	static unsigned getNoElements()const;
+	static unsigned getNoElements();
 	Element* getLeft() const;
 	Element* getRight() const;
 	void setLeft(Element<T>*);
@@ -30,7 +30,7 @@ void Element<T>::setInfo(T val) {
 template<typename T>
 Element<T>::Element(T info) {
 	this->info = info;
-	left = right = NULL;// parent = NULL;
+	left = right = nullptr;// parent = NULL;
 	//this->color = RED;
 }
 
