@@ -1,6 +1,7 @@
 #pragma once
 #include"Element.h"
 #include <iostream>
+#include<string>
 using namespace std;
 
 template<typename T>
@@ -10,6 +11,7 @@ public:
 	Element<T>* root;
 public:
 	void insert(T);
+    void remove(T);
     bool isEmpty();
     template<typename T>
     friend ostream& operator << (ostream&, const Bucket&);
@@ -32,7 +34,7 @@ void Bucket<T>::insert(T val) {
         Element<T>* x = root;
         while (x != NULL) {
             y = x;
-            if (val < x->getInfo()) {
+            if (val <= x->getInfo()) {
                 x = x->getLeft();
             }
             else {
@@ -52,6 +54,100 @@ void Bucket<T>::insert(T val) {
 }
 
 template<typename T>
+void Bucket<T>::remove(T val) {
+    Element<T>* aux = root;
+    //Element<T>* elemToRemove;
+    Element<T>* parent = root;
+    while (aux != NULL) {                     //cautam
+        if (val < aux->getInfo() ) {      //elementul
+			aux = aux->getLeft();               //in
+        }                                   //arbore
+        if (val > aux->getInfo()) {
+			aux = aux->getRight();
+        }
+        if (val == aux->getInfo()) {
+            break;
+        }
+    }                           
+    if (aux == NULL) {                        //inseamna ca nu l-am gasit
+        throw invalid_argument("not found");
+    }
+
+	if (aux == root && !aux->getLeft() && !aux->getRight()) {
+		root = NULL;
+	}
+	else if(aux == root && !aux->getRight()) {
+		root = root->getLeft();
+		delete aux;
+	}
+	else if (aux == root && !aux->getLeft()) {
+		root = root->getRight();
+		delete aux;
+	}
+	else {
+
+		while (aux)
+		{
+			if (aux->getInfo() > val)
+			{
+				parent = aux;
+				aux = aux->getLeft();
+			}
+			else if (aux->getInfo() < val)
+			{
+				parent = aux;
+				aux = aux->getRight();
+			}
+			else
+			{
+				// daca sunt egale
+				if (!aux->getRight() && !aux->getLeft())
+				{
+					// daca nodul este frunza
+					if (parent->getLeft() == aux)
+						parent->setLeft(NULL);
+					else
+						parent->setRight(NULL);
+					delete aux;
+				}
+				else if (!aux->getLeft())
+				{
+					//daca are doar fiul drept
+					if (parent->getLeft() == aux)
+						parent->setLeft(aux->getRight());
+					else
+						parent->setRight(aux->getRight());
+					delete aux;
+				}
+				else if (!aux->getRight())
+				{
+					//daca are doar fiul stang
+					if (parent->getLeft() == aux)
+						parent->setLeft(aux->getLeft());
+					else
+						parent->setRight(aux->getLeft());
+					delete aux;
+				}
+				else
+				{
+					Element<T>* temp = aux;
+					temp = aux->getRight();
+					while (temp->getLeft())
+					{
+						temp = temp->getLeft();
+					}
+					T value = temp->getInfo();
+					remove(temp->getInfo());
+					aux->setInfo(value);
+				}
+				return;
+			}
+		}
+		return;
+	}
+}
+
+template<typename T>
 void Bucket<T>::SRD(Element<T>* x , ostream& out)const {
     if (x != NULL) {
         SRD(x->getLeft(),out);
@@ -63,6 +159,5 @@ void Bucket<T>::SRD(Element<T>* x , ostream& out)const {
 template<typename T>
 ostream& operator << (ostream& out, const Bucket<T>& bucket) {
     bucket.SRD(bucket.root,out);
-    //out << "pula";
     return out;
 }

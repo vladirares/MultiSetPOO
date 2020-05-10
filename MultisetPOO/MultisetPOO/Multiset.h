@@ -10,7 +10,7 @@ class Multiset
 {
 	vector <Bucket<T> > Buckets;
 	unsigned capacity;
-	float loadFactor;
+	float loadFactor = 0.75;
 
 public:
 	//int a[2];
@@ -18,6 +18,7 @@ public:
 
 	Multiset();
 	void insert(T);
+	void remove(T);
 	template<typename T, typename P>
 	friend ostream& operator << (ostream&, const Multiset<T,P>&);
 };
@@ -44,6 +45,12 @@ ostream& operator << (ostream& out, const Multiset<T, P>& multiset) {
 		//out << "pula" << " ";
 	}
 		return out;
+}
+
+template<typename T, typename P>
+void Multiset<T, P>::remove(T element) {
+	P Hash;
+	Buckets[Hash(element) % capacity].remove(element);
 }
 
 /*
