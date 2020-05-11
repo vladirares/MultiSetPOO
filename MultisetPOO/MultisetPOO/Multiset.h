@@ -8,6 +8,7 @@ using namespace std;
 template < typename T, typename P = Comparator<T> >
 class Multiset
 {
+	P Hash;
 	vector <Bucket<T> > Buckets;
 	unsigned capacity;
 	float loadFactor = 0.75;
@@ -19,6 +20,10 @@ public:
 	Multiset();
 	void insert(T);
 	void remove(T);
+	unsigned numberOf(T);
+	unsigned numberOfDistincts();
+	bool contains(T);
+	void removeAll(T);
 	template<typename T, typename P>
 	friend ostream& operator << (ostream&, const Multiset<T,P>&);
 };
@@ -32,7 +37,6 @@ Multiset<T,P>::Multiset() {
 
 template<typename T, typename P>
 void Multiset<T, P>::insert(T val) {
-	P Hash;
 	//cout << Hash(val) << " ";
 	Buckets[Hash(val) % capacity].insert(val);
 }
@@ -49,8 +53,34 @@ ostream& operator << (ostream& out, const Multiset<T, P>& multiset) {
 
 template<typename T, typename P>
 void Multiset<T, P>::remove(T element) {
-	P Hash;
 	Buckets[Hash(element) % capacity].remove(element);
+}
+
+template<typename T, typename P>
+unsigned Multiset<T, P>::numberOf(T val) {
+	return Buckets[Hash(val) % capacity].numberOf(val);
+}
+
+template<typename T, typename P>
+unsigned Multiset<T, P>::numberOfDistincts() {
+	unsigned total = 0;
+	for (Bucket<T> bucket : Buckets) {
+		total += bucket.numberOfDistinct();
+	}
+	return total;
+}
+
+template<typename T, typename P>
+bool Multiset<T, P>::contains(T val) {
+	return Buckets[Hash(val) % capacity].contains(val);
+}
+
+template<typename T, typename P>
+void Multiset<T, P>::removeAll(T val) {
+	Bucket<T>* bucket = &Buckets[Hash(val) % capacity];
+	while (bucket->contains(val)) {
+		bucket->remove(val);
+	}
 }
 
 /*

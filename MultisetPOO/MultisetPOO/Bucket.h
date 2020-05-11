@@ -1,5 +1,6 @@
 #pragma once
 #include"Element.h"
+#include"Comparator.h"
 #include <iostream>
 #include<string>
 using namespace std;
@@ -7,17 +8,34 @@ using namespace std;
 template<typename T>
 class Bucket
 {
-public:
+
+	//bool stop = false;
+	unsigned distincts;
+	void remove(T, bool);
+//public:
 	Element<T>* root;
 public:
+	Bucket<T>();
 	void insert(T);
     void remove(T);
     bool isEmpty();
-    template<typename T>
-    friend ostream& operator << (ostream&, const Bucket&);
+	unsigned numberOf(T);
+	unsigned numberOfDistinct();
+	bool contains(T);
+    friend ostream& operator << (ostream& out, const Bucket& bucket) {
+		bucket.SRD(bucket.root, out);
+		return out;
+	}
     void SRD(Element<T>*, ostream&)const;
 
 };
+
+template<typename T>
+Bucket<T>::Bucket<T>() {
+	this->root = NULL;
+	this->distincts = 0;
+	
+}
 
 template<typename T>
 bool Bucket<T>::isEmpty() {
@@ -26,6 +44,9 @@ bool Bucket<T>::isEmpty() {
 
 template<typename T>
 void Bucket<T>::insert(T val) {
+	if (!this->contains(val)) {
+		this->distincts++;
+	}
     if (root == NULL) {
         root = new Element<T>(val);
     }
@@ -34,7 +55,7 @@ void Bucket<T>::insert(T val) {
         Element<T>* x = root;
         while (x != NULL) {
             y = x;
-            if (val <= x->getInfo()) {
+            if (Comparator<T>::lesser(val,x->getInfo()) || Comparator<T>::equals(val, x->getInfo())) {
                 x = x->getLeft();
             }
             else {
@@ -55,8 +76,19 @@ void Bucket<T>::insert(T val) {
 
 template<typename T>
 void Bucket<T>::remove(T val) {
+	if (!this->contains(val)) {
+		throw invalid_argument("not found");
+	}
+	if (this->numberOf(val) == 1) {
+		this->distincts--;
+	}
+	remove(val, true);
+}
+
+template<typename T>
+void Bucket<T>::remove(T val, bool stop) {
+	
     Element<T>* aux = root;
-    //Element<T>* elemToRemove;
     Element<T>* parent = root;
     while (aux != NULL) {                     //cautam
         if (val < aux->getInfo() ) {      //elementul
@@ -137,14 +169,57 @@ void Bucket<T>::remove(T val) {
 						temp = temp->getLeft();
 					}
 					T value = temp->getInfo();
-					remove(temp->getInfo());
+					remove(temp->getInfo(),true);
 					aux->setInfo(value);
 				}
+				//this->stop = false;
 				return;
 			}
 		}
+		//this->stop = false;
 		return;
 	}
+
+}
+
+template<typename T>
+unsigned Bucket<T>::numberOf(T val) {
+	Element<T>* x = root;
+	unsigned number = 0;
+	while (x != NULL) {
+		if (val == x->getInfo()) {
+			number++;
+		}
+		if (val <= x->getInfo()) {
+			x = x->getLeft();
+		}
+		else{
+			x = x->getRight();
+		}
+	}
+	return number;
+}
+
+template<typename T>
+unsigned Bucket<T>::numberOfDistinct() {
+	return this->distincts;
+}
+
+template<typename T>
+bool Bucket<T>::contains(T val) {
+	Element<T>* x = root;
+	while (x != NULL) {
+		if (val == x->getInfo()) {
+			return true;
+		}
+		if (val <= x->getInfo()) {
+			x = x->getLeft();
+		}
+		else {
+			x = x->getRight();
+		}
+	}
+	return false;
 }
 
 template<typename T>
@@ -156,8 +231,5 @@ void Bucket<T>::SRD(Element<T>* x , ostream& out)const {
     }
 }
 
-template<typename T>
-ostream& operator << (ostream& out, const Bucket<T>& bucket) {
-    bucket.SRD(bucket.root,out);
-    return out;
-}
+//template<typename T>
+//ostream& operator << (ostream& out, const Bucket<T>& bucket) 

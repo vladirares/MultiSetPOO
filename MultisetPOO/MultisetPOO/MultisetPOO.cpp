@@ -28,10 +28,25 @@ int main()
     p.insert("trrrr");
     p.insert("rttrtra-ta");
 
-    p.remove("mama");
-    //m.remove(38);
-    cout << p;
-    
+    ////p.remove("mama");
+    ////m.remove(38);
+    //cout << m << endl;
+    //cout <<"distincts: "<< m.numberOfDistincts()<<endl;
+    ////cout << m.numberOf(4)<<endl;
+    ////m.removeAll(4);
+    //m.remove(4);
+    //cout << m;
+    cout << m;
+    cout << "distincts: " << m.numberOfDistincts() << endl;
+    m.remove(4);
+
+    m.remove(4);
+
+    cout << m;
+    cout << "distincts: " << m.numberOfDistincts() << endl;
+    //cout <<"distincts: "<< m.numberOfDistincts() << endl;
+
+
     return 0;
 }
 
