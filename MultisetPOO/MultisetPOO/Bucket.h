@@ -55,7 +55,7 @@ void Bucket<T>::insert(T val) {
         Element<T>* x = root;
         while (x != NULL) {
             y = x;
-            if (Comparator<T>::lesser(val,x->getInfo()) || Comparator<T>::equals(val, x->getInfo())) {
+            if (Comparator<T>::less(val,x->getInfo()) || Comparator<T>::equals(val, x->getInfo())) {
                 x = x->getLeft();
             }
             else {
@@ -65,7 +65,7 @@ void Bucket<T>::insert(T val) {
         Element<T>* nodNou = new Element<T>(val);
         nodNou->setLeft(NULL);
         nodNou->setRight(NULL);
-        if (y->getInfo() < val) {
+        if (Comparator<T>::less(y->getInfo(),val)) {
             y->setRight(nodNou);
         }
         else {
@@ -90,14 +90,14 @@ void Bucket<T>::remove(T val, bool stop) {
 	
     Element<T>* aux = root;
     Element<T>* parent = root;
-    while (aux != NULL) {                     //cautam
-        if (val < aux->getInfo() ) {      //elementul
-			aux = aux->getLeft();               //in
-        }                                   //arbore
-        if (val > aux->getInfo()) {
+    while (aux != NULL) {									 //cautam
+        if (Comparator<T>::less(val, aux->getInfo())) {      //elementul
+			aux = aux->getLeft();								//in
+        }													//arbore
+        if (Comparator<T>::greater(val, aux->getInfo())) {
 			aux = aux->getRight();
         }
-        if (val == aux->getInfo()) {
+        if (Comparator<T>::equals(val, aux->getInfo())) {
             break;
         }
     }                           
@@ -120,12 +120,12 @@ void Bucket<T>::remove(T val, bool stop) {
 
 		while (aux)
 		{
-			if (aux->getInfo() > val)
+			if (Comparator<T>::greater(aux->getInfo(),val) )
 			{
 				parent = aux;
 				aux = aux->getLeft();
 			}
-			else if (aux->getInfo() < val)
+			else if (Comparator<T>::less(aux->getInfo(),val))
 			{
 				parent = aux;
 				aux = aux->getRight();
@@ -187,10 +187,10 @@ unsigned Bucket<T>::numberOf(T val) {
 	Element<T>* x = root;
 	unsigned number = 0;
 	while (x != NULL) {
-		if (val == x->getInfo()) {
+		if (Comparator<T>::equals(val, x->getInfo())) {
 			number++;
 		}
-		if (val <= x->getInfo()) {
+		if (Comparator<T>::equals(val, x->getInfo()) || Comparator<T>::less(val, x->getInfo() ) ) {
 			x = x->getLeft();
 		}
 		else{
@@ -209,10 +209,10 @@ template<typename T>
 bool Bucket<T>::contains(T val) {
 	Element<T>* x = root;
 	while (x != NULL) {
-		if (val == x->getInfo()) {
+		if (Comparator<T>::equals(val, x->getInfo())) {
 			return true;
 		}
-		if (val <= x->getInfo()) {
+		if (Comparator<T>::equals(val, x->getInfo()) || Comparator<T>::less(val, x->getInfo() ) ) {
 			x = x->getLeft();
 		}
 		else {
