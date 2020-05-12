@@ -18,6 +18,7 @@ public:
 	//void numbersAreEqual();
 
 	Multiset();
+	void rehash();
 	void insert(T);
 	void remove(T);
 	unsigned numberOf(T);
@@ -28,11 +29,26 @@ public:
 	friend ostream& operator << (ostream&, const Multiset<T,P>&);
 };
 
+//de pus P in loc de COMPARATOR te rog sa nu uiti !
+
 template <typename T,typename P>
 Multiset<T,P>::Multiset() {
 	Buckets.resize(16);
 	this->capacity = 16;
 	this->loadFactor = 0.75;
+}
+
+template <typename T, typename P>
+void Multiset<T, P>::rehash() {
+	vector<T> data;
+	for (Bucket<T> bucket : Buckets) {
+		for (T el : bucket.getElements()) {
+			data.push_back(el);
+		}
+	}
+	for (T el : data) {
+		cout << el << " ";
+	}
 }
 
 template<typename T, typename P>

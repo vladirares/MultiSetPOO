@@ -2,18 +2,21 @@
 #include"Element.h"
 #include"Comparator.h"
 #include <iostream>
-#include<string>
+#include <vector>
+#include <string>
 using namespace std;
 
 template<typename T>
 class Bucket
 {
-
 	//bool stop = false;
+	vector<T> elements;
 	unsigned distincts;
 	void remove(T, bool);
 //public:
 	Element<T>* root;
+	void SRD(Element<T>*, ostream&)const;
+	void SRD(Element<T>* );
 public:
 	Bucket<T>();
 	void insert(T);
@@ -21,17 +24,25 @@ public:
     bool isEmpty();
 	unsigned numberOf(T);
 	unsigned numberOfDistinct();
+	vector<T> getElements();
 	bool contains(T);
     friend ostream& operator << (ostream& out, const Bucket& bucket) {
 		bucket.SRD(bucket.root, out);
 		return out;
 	}
-    void SRD(Element<T>*, ostream&)const;
 
 };
 
+
 template<typename T>
-Bucket<T>::Bucket<T>() {
+vector<T> Bucket<T>::getElements() {
+	elements.clear();
+	SRD(root);
+	return elements;
+}
+
+template<typename T>
+Bucket<T>::Bucket() {
 	this->root = NULL;
 	this->distincts = 0;
 	
@@ -44,6 +55,7 @@ bool Bucket<T>::isEmpty() {
 
 template<typename T>
 void Bucket<T>::insert(T val) {
+	this->elements.push_back(val);
 	if (!this->contains(val)) {
 		this->distincts++;
 	}
@@ -205,6 +217,8 @@ unsigned Bucket<T>::numberOfDistinct() {
 	return this->distincts;
 }
 
+
+
 template<typename T>
 bool Bucket<T>::contains(T val) {
 	Element<T>* x = root;
@@ -229,6 +243,15 @@ void Bucket<T>::SRD(Element<T>* x , ostream& out)const {
         out << x->getInfo() << " ";
         SRD(x->getRight(),out);
     }
+}
+
+template<typename T>
+void Bucket<T>::SRD(Element<T>* x) {
+	if (x != NULL) {
+		SRD(x->getLeft());
+		elements.push_back( x->getInfo() );
+		SRD(x->getRight());
+	}
 }
 
 //template<typename T>

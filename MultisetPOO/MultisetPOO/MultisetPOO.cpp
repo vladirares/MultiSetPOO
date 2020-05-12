@@ -64,6 +64,9 @@ int main()
 
    //cout << Comparator<double>::equals(3.14,4.14);
 
+    cout << endl;
+    d.rehash();
+
 
     return 0;
 }
