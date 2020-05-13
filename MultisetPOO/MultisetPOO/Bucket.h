@@ -6,7 +6,7 @@
 #include <string>
 using namespace std;
 
-template<typename T>
+template<typename T, typename P>
 class Bucket
 {
 	//bool stop = false;
@@ -19,7 +19,7 @@ class Bucket
 	void SRD(Element<T>* );
 	void deleteSRD(Element<T>*);
 public:
-	Bucket<T>();
+	Bucket<T,P>();
 	void insert(T);
     void remove(T);
     bool isEmpty();
@@ -41,27 +41,27 @@ public:
 };
 
 
-template<typename T>
-vector<T> Bucket<T>::getElements() {
+template<typename T, typename P>
+vector<T> Bucket<T,P>::getElements() {
 	elements.clear();
 	SRD(root);
 	return elements;
 }
 
-template<typename T>
-Bucket<T>::Bucket() {
+template<typename T, typename P>
+Bucket<T,P>::Bucket() {
 	this->root = NULL;
 	this->distincts = 0;
 	
 }
 
-template<typename T>
-bool Bucket<T>::isEmpty() {
+template<typename T, typename P>
+bool Bucket<T,P>::isEmpty() {
     return root ? false : true;
 }
 
-template<typename T>
-void Bucket<T>::insert(T val) {
+template<typename T, typename P>
+void Bucket<T,P>::insert(T val) {
 	this->elements.push_back(val);
 	if (!this->contains(val)) {
 		this->distincts++;
@@ -74,7 +74,7 @@ void Bucket<T>::insert(T val) {
         Element<T>* x = root;
         while (x != NULL) {
             y = x;
-            if (Comparator<T>::less(val,x->getInfo()) || Comparator<T>::equals(val, x->getInfo())) {
+            if (P::less(val,x->getInfo()) || P::equals(val, x->getInfo())) {
                 x = x->getLeft();
             }
             else {
@@ -84,7 +84,7 @@ void Bucket<T>::insert(T val) {
         Element<T>* nodNou = new Element<T>(val);
         nodNou->setLeft(NULL);
         nodNou->setRight(NULL);
-        if (Comparator<T>::less(y->getInfo(),val)) {
+        if (P::less(y->getInfo(),val)) {
             y->setRight(nodNou);
         }
         else {
@@ -93,8 +93,8 @@ void Bucket<T>::insert(T val) {
     }
 }
 
-template<typename T>
-void Bucket<T>::remove(T val) {
+template<typename T, typename P>
+void Bucket<T,P>::remove(T val) {
 	if (!this->contains(val)) {
 		throw invalid_argument("not found");
 	}
@@ -104,19 +104,19 @@ void Bucket<T>::remove(T val) {
 	remove(val, true);
 }
 
-template<typename T>
-void Bucket<T>::remove(T val, bool stop) {
+template<typename T, typename P>
+void Bucket<T,P>::remove(T val, bool stop) {
 	
     Element<T>* aux = root;
     Element<T>* parent = root;
     while (aux != NULL) {									 //cautam
-        if (Comparator<T>::less(val, aux->getInfo())) {      //elementul
+        if (P::less(val, aux->getInfo())) {      //elementul
 			aux = aux->getLeft();								//in
         }													//arbore
-        if (Comparator<T>::greater(val, aux->getInfo())) {
+        if (P::greater(val, aux->getInfo())) {
 			aux = aux->getRight();
         }
-        if (Comparator<T>::equals(val, aux->getInfo())) {
+        if (P::equals(val, aux->getInfo())) {
             break;
         }
     }                           
@@ -139,12 +139,12 @@ void Bucket<T>::remove(T val, bool stop) {
 
 		while (aux)
 		{
-			if (Comparator<T>::greater(aux->getInfo(),val) )
+			if (P::greater(aux->getInfo(),val) )
 			{
 				parent = aux;
 				aux = aux->getLeft();
 			}
-			else if (Comparator<T>::less(aux->getInfo(),val))
+			else if (P::less(aux->getInfo(),val))
 			{
 				parent = aux;
 				aux = aux->getRight();
@@ -201,15 +201,15 @@ void Bucket<T>::remove(T val, bool stop) {
 
 }
 
-template<typename T>
-unsigned Bucket<T>::numberOf(T val) {
+template<typename T, typename P>
+unsigned Bucket<T,P>::numberOf(T val) {
 	Element<T>* x = root;
 	unsigned number = 0;
 	while (x != NULL) {
-		if (Comparator<T>::equals(val, x->getInfo())) {
+		if (P::equals(val, x->getInfo())) {
 			number++;
 		}
-		if (Comparator<T>::equals(val, x->getInfo()) || Comparator<T>::less(val, x->getInfo() ) ) {
+		if (P::equals(val, x->getInfo()) || P::less(val, x->getInfo() ) ) {
 			x = x->getLeft();
 		}
 		else{
@@ -219,21 +219,21 @@ unsigned Bucket<T>::numberOf(T val) {
 	return number;
 }
 
-template<typename T>
-unsigned Bucket<T>::numberOfDistinct() {
+template<typename T, typename P>
+unsigned Bucket<T,P>::numberOfDistinct() {
 	return this->distincts;
 }
 
 
 
-template<typename T>
-bool Bucket<T>::contains(T val) {
+template<typename T, typename P>
+bool Bucket<T,P>::contains(T val) {
 	Element<T>* x = root;
 	while (x != NULL) {
-		if (Comparator<T>::equals(val, x->getInfo())) {
+		if (P::equals(val, x->getInfo())) {
 			return true;
 		}
-		if (Comparator<T>::equals(val, x->getInfo()) || Comparator<T>::less(val, x->getInfo() ) ) {
+		if (P::equals(val, x->getInfo()) || P::less(val, x->getInfo() ) ) {
 			x = x->getLeft();
 		}
 		else {
@@ -243,8 +243,8 @@ bool Bucket<T>::contains(T val) {
 	return false;
 }
 
-template<typename T>
-void Bucket<T>::SRD(Element<T>* x , ostream& out)const {
+template<typename T, typename P>
+void Bucket<T,P>::SRD(Element<T>* x , ostream& out)const {
     if (x != NULL) {
         SRD(x->getLeft(),out);
         out << x->getInfo() << " ";
@@ -252,8 +252,8 @@ void Bucket<T>::SRD(Element<T>* x , ostream& out)const {
     }
 }
 
-template<typename T>
-void Bucket<T>::SRD(Element<T>* x) {
+template<typename T, typename P>
+void Bucket<T,P>::SRD(Element<T>* x) {
 	if (x != NULL) {
 		SRD(x->getLeft());
 		elements.push_back( x->getInfo() );
@@ -261,8 +261,8 @@ void Bucket<T>::SRD(Element<T>* x) {
 	}
 }
 
-template<typename T>
-void Bucket<T>::deleteSRD(Element<T>* x) {
+template<typename T, typename P>
+void Bucket<T,P>::deleteSRD(Element<T>* x) {
 	if (x != NULL) {
 		deleteSRD(x->getLeft());
 		deleteSRD(x->getRight());

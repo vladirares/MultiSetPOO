@@ -74,7 +74,17 @@ int main()
 
     cout << endl;
 
-  
+    Multiset<double> dd = d;
+
+    cout << dd;
+
+    cout << endl;
+
+    Multiset<double> ddd ;
+
+    ddd = d;
+
+    cout << ddd;
 
     return 0;
 }

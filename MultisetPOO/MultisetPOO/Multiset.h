@@ -9,7 +9,7 @@ template < typename T, typename P = Comparator<T> >
 class Multiset
 {
 	P Hash;
-	vector <Bucket<T> > Buckets;
+	vector <Bucket<T,P> > Buckets;
 	unsigned capacity;
 	float loadFactor = 0.75;
 	unsigned numberOfElements;
@@ -19,6 +19,7 @@ public:
 	//void numbersAreEqual();
 
 	Multiset();
+	Multiset(const Multiset&);
 	void rehash();
 	void insert(T);
 	void remove(T);
@@ -26,6 +27,7 @@ public:
 	unsigned numberOfDistincts();
 	bool contains(T);
 	void removeAll(T);
+	void operator = (Multiset<T, P>&);
 	template<typename T, typename P>
 	friend ostream& operator << (ostream&, const Multiset<T,P>&);
 };
@@ -41,14 +43,27 @@ Multiset<T,P>::Multiset() {
 }
 
 template <typename T, typename P>
-void Multiset<T, P>::rehash() {
+Multiset<T, P>::Multiset(const Multiset & multiset) : Multiset(){
 	vector<T> data;
-	for (Bucket<T> bucket : Buckets) {
+	for (Bucket<T, P> bucket : multiset.Buckets) {
 		for (T el : bucket.getElements()) {
 			data.push_back(el);
 		}
 	}
-	for (Bucket<T> &bucket : Buckets) {
+	for (T el : data) {
+		this->insert(el);
+	}
+}
+
+template <typename T, typename P>
+void Multiset<T, P>::rehash() {
+	vector<T> data;
+	for (Bucket<T,P> bucket : Buckets) {
+		for (T el : bucket.getElements()) {
+			data.push_back(el);
+		}
+	}
+	for (Bucket<T,P> &bucket : Buckets) {
 		if(!bucket.isEmpty())
 		bucket.deleteBucket();
 	}
@@ -76,7 +91,7 @@ void Multiset<T, P>::insert(T val) {
 
 template<typename T, typename P>
 ostream& operator << (ostream& out, const Multiset<T, P>& multiset) {
-	for (Bucket<T> bucket : multiset.Buckets) {
+	for (Bucket<T,P> bucket : multiset.Buckets) {
 		if(!bucket.isEmpty())
 		out << bucket << " "<<endl;
 	}
@@ -97,7 +112,7 @@ unsigned Multiset<T, P>::numberOf(T val) {
 template<typename T, typename P>
 unsigned Multiset<T, P>::numberOfDistincts() {
 	unsigned total = 0;
-	for (Bucket<T> bucket : Buckets) {
+	for (Bucket<T,P> bucket : Buckets) {
 		total += bucket.numberOfDistinct();
 	}
 	return total;
@@ -110,8 +125,21 @@ bool Multiset<T, P>::contains(T val) {
 
 template<typename T, typename P>
 void Multiset<T, P>::removeAll(T val) {
-	Bucket<T>* bucket = &Buckets[Hash(val) % capacity];
+	Bucket<T,P>* bucket = &Buckets[Hash(val) % capacity];
 	while (bucket->contains(val)) {
 		bucket->remove(val);
+	}
+}
+
+template<typename T, typename P>
+void Multiset<T, P>::operator = (Multiset<T, P>& multiset) {
+	vector<T> data;
+	for (Bucket<T, P> bucket : multiset.Buckets) {
+		for (T el : bucket.getElements()) {
+			data.push_back(el);
+		}
+	}
+	for (T el : data) {
+		this->insert(el);
 	}
 }
