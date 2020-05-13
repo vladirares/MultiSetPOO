@@ -1,4 +1,4 @@
-﻿  Multiset.cpp
-  MultisetPOO.cpp
-  Generating Code...
+﻿  MultisetPOO.cpp
+D:\Programming\Projects\C++\temaPOO\MultiSetPOO\MultisetPOO\MultisetPOO\MultisetPOO.cpp(35,5): warning C4805: '==': unsafe mix of type 'bool' and type 'unsigned int' in operation
+D:\Programming\Projects\C++\temaPOO\MultiSetPOO\MultisetPOO\MultisetPOO\MultisetPOO.cpp(80,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   MultisetPOO.vcxproj -> D:\Programming\Projects\C++\temaPOO\MultiSetPOO\MultisetPOO\Debug\MultisetPOO.exe

@@ -32,11 +32,9 @@ public:
 		return out;
 	}
 	void deleteBucket() {
-		/*while (root) {
-			remove(root->getInfo());
-		}*/
 		deleteSRD(root);
 		root = NULL;
+		this->distincts = 0;
 	}
 };
 

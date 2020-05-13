@@ -1,91 +1,88 @@
 #include <iostream>
 #include <string>
+#include <cassert>
+#include <time.h>  
 #include "Multiset.h"
 using namespace std;
 
+void testerAssert();
+void testerAfisat();
+
 int main()
-{
-    //Multiset<float> m;
-    //Multiset<string>p;
-
-    //m.insert(4.2f);
-    //m.insert(4);
-    //m.insert(4);
-    //m.insert(5);
-    //m.insert(4);
-    //m.insert(20);
-    //m.insert(22);
-    //m.insert(38);
-    //m.insert(34);
-    //
-    //p.insert("mama");
-    //p.insert("mama");
-    //p.insert("mama");
-    //p.insert("kiksd");
-    //p.insert("ma-ta");
-    //p.insert("ta-ta");
-    //p.insert("trrta");
-    //p.insert("trrrr");
-    //p.insert("rttrtra-ta");
-
-    //////p.remove("mama");
-    //////m.remove(38);
-    ////cout << m << endl;
-    ////cout <<"distincts: "<< m.numberOfDistincts()<<endl;
-    //////cout << m.numberOf(4)<<endl;
-    //////m.removeAll(4);
-    ////m.remove(4);
-    ////cout << m;
-    //cout << m;
-    //cout << "distincts: " << m.numberOfDistincts() << endl;
-    //m.remove(4);
-
-    //m.remove(4);
-
-    //cout << m;
-    //cout << "distincts: " << m.numberOfDistincts() << endl;
-    ////cout <<"distincts: "<< m.numberOfDistincts() << endl;
-
-    Multiset<double> d;
-
-    d.insert(4.2);
-    d.insert(4.24);
-    d.insert(5.22);
-    d.insert(5.2);
-    d.insert(4.14);
-    d.insert(23.253);
-    d.insert(22.92);
-    d.insert(3.134);
-    d.insert(23.245);
-    d.insert(22.59);
-    d.insert(3.184);
-   
-    cout << d;
-
-    d.insert(8.23);
-
-    cout << endl;
-
-    cout << d;
-   
-    //cout << d.numberOfDistincts();
-
-   //cout << Comparator<double>::equals(3.14,4.14);
-
-    cout << endl;
-
-    Multiset<double> dd = d;
-
-    cout << dd;
-
-    cout << endl;
-
-    Multiset<double> ddd ;
-
-    ddd = d;
-
-    cout << ddd;
+{   
+    //testerAfisat();
+    testerAssert();
 
     return 0;
 }
 
+
+void testerAssert() {
+    Multiset<int> inturi;
+
+    inturi.insert(23);
+    assert(inturi.contains(23));  //test inserare si continere
+
+    inturi.remove(23);
+    assert(!inturi.contains(23));   //test remove
+
+    for (int i = 0; i < 5; i++) {
+        inturi.insert(12);
+    }
+    assert(inturi.numberOf(12) == 5); //test numberOf
+
+    inturi.removeAll(12);
+    assert((inturi.contains(12) == inturi.numberOf(12)) && inturi.contains(12) == false); // test contains & numberOf
+
+    try {
+        inturi.remove(25);
+    }
+    catch (invalid_argument) {      //test element invalid
+        assert(true);
+    }
+
+    for (int i = 0; i < 11; i++) {
+        inturi.insert(i);
+    }
+
+    assert(inturi.numberOfDistincts() == 11);   //test numberOfDistincts
+
+    for (int i = 11; i < 100; i++) {
+        inturi.insert(i);
+    }
+
+    for (int i = 0; i < 100; i++) {
+        assert(inturi.numberOf(i) == 1);           //test rehashing
+    }
+
+    Multiset<double> doubles;
+
+    doubles.insert(3.14);
+    assert(doubles.contains(20.14));       //test comparator specializat 
+
+}
+
+void testerAfisat() {
+    Multiset<int> inturi;
+    int numere[] = { 24,27,89,56,123,76,98,98,23,67,125 }; // adaugam 11 elemente
+
+    for (int i : numere) {
+        inturi.insert(i);
+    }
+    cout << endl << "multiset cu 11 elemente inainte de rehash:";
+    cout << inturi;
+
+    inturi.insert(1023); // la al 12-lea se face rehash deoarece numarul elementelor depaseste loadFactor * capacity
+    cout << endl << "multiset cu 12 elemente dupa rehash:";
+    cout << endl;
+    cout << inturi;
+
+    srand(time(NULL));
+
+    for (int i = 0; i < 100; i++) {
+        inturi.insert(rand() % 10000);
+    }
+    cout << endl << "multiset cu 112 elemente random :";
+    cout << endl;
+    cout << inturi;
+}
