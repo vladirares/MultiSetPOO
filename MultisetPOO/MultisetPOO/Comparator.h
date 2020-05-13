@@ -25,7 +25,7 @@ public:
 
 
 size_t Comparator<double>::operator()(const double item)const {
-	return hashing(item-(int)item);
+	return hashing(  ceil((item-(int)item) * 100000000) );
 }
 
 //template<typename T>

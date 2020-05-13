@@ -12,6 +12,7 @@ class Multiset
 	vector <Bucket<T> > Buckets;
 	unsigned capacity;
 	float loadFactor = 0.75;
+	unsigned numberOfElements;
 
 public:
 	//int a[2];
@@ -36,6 +37,7 @@ Multiset<T,P>::Multiset() {
 	Buckets.resize(16);
 	this->capacity = 16;
 	this->loadFactor = 0.75;
+	this->numberOfElements = 0;
 }
 
 template <typename T, typename P>
@@ -46,15 +48,30 @@ void Multiset<T, P>::rehash() {
 			data.push_back(el);
 		}
 	}
+	for (Bucket<T> &bucket : Buckets) {
+		if(!bucket.isEmpty())
+		bucket.deleteBucket();
+	}
+	numberOfElements = 0;
+
+	capacity *= 2;
+	Buckets.resize(capacity);
+
+
 	for (T el : data) {
-		cout << el << " ";
+		insert(el);
+
 	}
 }
 
 template<typename T, typename P>
 void Multiset<T, P>::insert(T val) {
-	//cout << Hash(val) << " ";
 	Buckets[Hash(val) % capacity].insert(val);
+	numberOfElements++;
+
+	if (numberOfElements >= loadFactor * capacity) {
+		this->rehash();
+	}
 }
 
 template<typename T, typename P>
@@ -62,7 +79,6 @@ ostream& operator << (ostream& out, const Multiset<T, P>& multiset) {
 	for (Bucket<T> bucket : multiset.Buckets) {
 		if(!bucket.isEmpty())
 		out << bucket << " "<<endl;
-		//out << "pula" << " ";
 	}
 		return out;
 }
@@ -70,6 +86,7 @@ ostream& operator << (ostream& out, const Multiset<T, P>& multiset) {
 template<typename T, typename P>
 void Multiset<T, P>::remove(T element) {
 	Buckets[Hash(element) % capacity].remove(element);
+	numberOfElements--;
 }
 
 template<typename T, typename P>
@@ -98,17 +115,3 @@ void Multiset<T, P>::removeAll(T val) {
 		bucket->remove(val);
 	}
 }
-
-/*
-template < typename T, typename P >
-void Multiset<T, P>::numbersAreEqual() {
-	P b;
-	if ( b(a[0]) == b(a[1]) ) {
-		cout << "yes";
-	}
-	else {
-		cout << "no";
-	}
-	
-}
-*/

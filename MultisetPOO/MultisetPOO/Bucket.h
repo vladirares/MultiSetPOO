@@ -17,6 +17,7 @@ class Bucket
 	Element<T>* root;
 	void SRD(Element<T>*, ostream&)const;
 	void SRD(Element<T>* );
+	void deleteSRD(Element<T>*);
 public:
 	Bucket<T>();
 	void insert(T);
@@ -30,7 +31,13 @@ public:
 		bucket.SRD(bucket.root, out);
 		return out;
 	}
-
+	void deleteBucket() {
+		/*while (root) {
+			remove(root->getInfo());
+		}*/
+		deleteSRD(root);
+		root = NULL;
+	}
 };
 
 
@@ -253,6 +260,16 @@ void Bucket<T>::SRD(Element<T>* x) {
 		SRD(x->getRight());
 	}
 }
+
+template<typename T>
+void Bucket<T>::deleteSRD(Element<T>* x) {
+	if (x != NULL) {
+		deleteSRD(x->getLeft());
+		deleteSRD(x->getRight());
+		delete x;
+	}
+}
+
 
 //template<typename T>
 //ostream& operator << (ostream& out, const Bucket<T>& bucket) 

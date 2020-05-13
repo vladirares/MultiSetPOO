@@ -53,20 +53,28 @@ int main()
     d.insert(5.22);
     d.insert(5.2);
     d.insert(4.14);
-    d.insert(23.25);
-    d.insert(22.9);
-    d.insert(3.14);
+    d.insert(23.253);
+    d.insert(22.92);
+    d.insert(3.134);
+    d.insert(23.245);
+    d.insert(22.59);
+    d.insert(3.184);
+   
+    cout << d;
 
+    d.insert(8.23);
+
+    cout << endl;
 
     cout << d;
    
-    cout << d.numberOfDistincts();
+    //cout << d.numberOfDistincts();
 
    //cout << Comparator<double>::equals(3.14,4.14);
 
     cout << endl;
-    d.rehash();
 
+  
 
     return 0;
 }

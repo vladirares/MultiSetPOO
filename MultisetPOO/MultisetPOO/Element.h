@@ -14,7 +14,7 @@ public:
 	Element() = delete;
 	Element(T);
 	void setInfo(T);
-	T getInfo()const;
+	T getInfo();
 	static unsigned getNoElements();
 	Element* getLeft() const;
 	Element* getRight() const;
@@ -35,7 +35,7 @@ Element<T>::Element(T info) {
 }
 
 template<typename T>
-T Element<T>::getInfo() const {
+T Element<T>::getInfo()  {
 	return this->info;
 }
 
