@@ -9,7 +9,6 @@ using namespace std;
 template<typename T, typename P>
 class Bucket
 {
-	//bool stop = false;
 	vector<T> elements;
 	unsigned distincts;
 	void remove(T, bool);
@@ -107,10 +106,10 @@ void Bucket<T,P>::remove(T val, bool stop) {
 	
     Element<T>* aux = root;
     Element<T>* parent = root;
-    while (aux != NULL) {									 //cautam
-        if (P::less(val, aux->getInfo())) {      //elementul
-			aux = aux->getLeft();								//in
-        }													//arbore
+    while (aux != NULL) {							//cautam
+        if (P::less(val, aux->getInfo())) {			//elementul
+			aux = aux->getLeft();					//in
+        }											//arbore
         if (P::greater(val, aux->getInfo())) {
 			aux = aux->getRight();
         }
@@ -118,7 +117,7 @@ void Bucket<T,P>::remove(T val, bool stop) {
             break;
         }
     }                           
-    if (aux == NULL) {                        //inseamna ca nu l-am gasit
+    if (aux == NULL) {								//inseamna ca nu l-am gasit
         throw invalid_argument("not found");
     }
 
@@ -222,8 +221,6 @@ unsigned Bucket<T,P>::numberOfDistinct() {
 	return this->distincts;
 }
 
-
-
 template<typename T, typename P>
 bool Bucket<T,P>::contains(T val) {
 	Element<T>* x = root;
@@ -268,6 +265,3 @@ void Bucket<T,P>::deleteSRD(Element<T>* x) {
 	}
 }
 
-
-//template<typename T>
-//ostream& operator << (ostream& out, const Bucket<T>& bucket) 

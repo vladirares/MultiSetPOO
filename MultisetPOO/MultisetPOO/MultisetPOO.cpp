@@ -10,7 +10,7 @@ void testerAfisat();
 
 int main()
 {   
-    //testerAfisat();
+    testerAfisat();
     testerAssert();
 
     return 0;
@@ -69,7 +69,7 @@ void testerAfisat() {
     for (int i : numere) {
         inturi.insert(i);
     }
-    cout << endl << "multiset cu 11 elemente inainte de rehash:";
+    cout << endl << "multiset cu 11 elemente inainte de rehash:"<<endl;
     cout << inturi;
 
     inturi.insert(1023); // la al 12-lea se face rehash deoarece numarul elementelor depaseste loadFactor * capacity

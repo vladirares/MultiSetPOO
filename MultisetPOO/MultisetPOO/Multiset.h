@@ -15,9 +15,6 @@ class Multiset
 	unsigned numberOfElements;
 
 public:
-	//int a[2];
-	//void numbersAreEqual();
-
 	Multiset();
 	Multiset(const Multiset&);
 	void rehash();
@@ -32,8 +29,6 @@ public:
 	friend ostream& operator << (ostream&, const Multiset<T,P>&);
 	~Multiset();
 };
-
-//de pus P in loc de COMPARATOR te rog sa nu uiti !
 
 template <typename T,typename P>
 Multiset<T,P>::Multiset() {
@@ -57,8 +52,8 @@ Multiset<T, P>::Multiset(const Multiset & multiset) : Multiset(){
 }
 
 template <typename T, typename P>
-void Multiset<T, P>::rehash() {
-	vector<T> data;
+void Multiset<T, P>::rehash() {			
+	vector<T> data;									//stocam toate datele deja existente intr-un vector pana refacem galetile
 	for (Bucket<T,P> bucket : Buckets) {
 		for (T el : bucket.getElements()) {
 			data.push_back(el);
@@ -66,12 +61,12 @@ void Multiset<T, P>::rehash() {
 	}
 	for (Bucket<T,P> &bucket : Buckets) {
 		if(!bucket.isEmpty())
-		bucket.deleteBucket();
+		bucket.deleteBucket();						//golim galetile
 	}
 	numberOfElements = 0;
 
-	capacity *= 2;
-	Buckets.resize(capacity);
+	capacity *= 2;									//dublam capacitatea 
+	Buckets.resize(capacity);						
 
 
 	for (T el : data) {
@@ -81,7 +76,7 @@ void Multiset<T, P>::rehash() {
 
 template<typename T, typename P>
 void Multiset<T, P>::insert(T val) {
-	Buckets[Hash(val) % capacity].insert(val);
+	Buckets[Hash(val) % capacity].insert(val);				//introducem elementul in galeata cu indicele calculat cu hash-ul si capacitatea
 	numberOfElements++;
 
 	if (numberOfElements >= loadFactor * capacity) {

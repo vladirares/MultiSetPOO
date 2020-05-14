@@ -28,14 +28,7 @@ size_t Comparator<double>::operator()(const double item)const {
 	return hashing(  ceil((item-(int)item) * 100000000) );
 }
 
-//template<typename T>
-//size_t Comparator<T>::operator()(const T item)const {
-//	return hashing(item);
-//}
-
-
 bool Comparator<double>::equals(double item1, double item2) {
-	//std::cout << (int)((item1 - floor(item1)) * 1000000) << endl << (int)((item2 - floor(item2)) * 1000000) <<endl;
 	if ( abs((int)((item1 - floor(item1))*100000000) - (int)((item2 - floor(item2))*100000000))<2 ) {
 		return true;
 	}

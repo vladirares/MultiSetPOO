@@ -1,4 +1,4 @@
-﻿  Element.cpp
+﻿  Comparator.cpp
   Multiset.cpp
   MultisetPOO.cpp
 D:\Programming\Projects\C++\temaPOO\MultiSetPOO\MultisetPOO\MultisetPOO\MultisetPOO.cpp(35,5): warning C4805: '==': unsafe mix of type 'bool' and type 'unsigned int' in operation

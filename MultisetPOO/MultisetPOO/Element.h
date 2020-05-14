@@ -1,21 +1,16 @@
 #pragma once
 
-//extern const bool RED = true;
-//extern const bool BLACK = false;
-
 template <typename T>
 class Element
 {
 	T info;
-	Element* left, * right;// *parent;
-	//bool color;
-	//static unsigned noElements;
+	Element* left, * right;
+
 public:
 	Element() = delete;
 	Element(T);
 	void setInfo(T);
 	T getInfo();
-	//static unsigned getNoElements();
 	Element* getLeft() const;
 	Element* getRight() const;
 	void setLeft(Element<T>*);
@@ -30,22 +25,13 @@ void Element<T>::setInfo(T val) {
 template<typename T>
 Element<T>::Element(T info) {
 	this->info = info;
-	left = right = nullptr;// parent = NULL;
-	//this->color = RED;
+	left = right = nullptr;
 }
 
 template<typename T>
 T Element<T>::getInfo()  {
 	return this->info;
 }
-
-//template<typename T>
-//unsigned Element<T>::noElements = 0;
-
-//template<typename T>
-//unsigned Element<T>::getNoElements() {
-//	return Element::noElements;
-//}
 
 template<typename T>
 Element<T>* Element<T>::getLeft()const {
