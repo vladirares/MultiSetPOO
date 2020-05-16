@@ -11,7 +11,7 @@ void testerAfisat();
 int main()
 {   
     testerAfisat();
-    testerAssert();
+    //testerAssert();
 
     return 0;
 }

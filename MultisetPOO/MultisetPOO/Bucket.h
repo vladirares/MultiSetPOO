@@ -188,11 +188,9 @@ void Bucket<T,P>::remove(T val, bool stop) {
 					remove(temp->getInfo(),true);
 					aux->setInfo(value);
 				}
-				//this->stop = false;
 				return;
 			}
 		}
-		//this->stop = false;
 		return;
 	}
 
