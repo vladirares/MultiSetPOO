@@ -130,6 +130,11 @@ void Multiset<T, P>::removeAll(T val) {
 
 template<typename T, typename P>
 void Multiset<T, P>::operator = (Multiset<T, P>& multiset) {
+	for (Bucket<T, P> bucket : Buckets) {
+		bucket.deleteBucket();
+	}
+	Buckets.clear();
+	
 	vector<T> data;
 	for (Bucket<T, P> bucket : multiset.Buckets) {
 		for (T el : bucket.getElements()) {

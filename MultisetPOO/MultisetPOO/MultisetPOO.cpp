@@ -10,8 +10,8 @@ void testerAfisat();
 
 int main()
 {   
-    testerAfisat();
-    //testerAssert();
+    //testerAfisat();
+    testerAssert();
 
     return 0;
 }
