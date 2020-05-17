@@ -122,6 +122,7 @@ void Bucket<T,P>::remove(T val, bool stop) {
     }
 
 	if (aux == root && !aux->getLeft() && !aux->getRight()) {
+		delete root;
 		root = NULL;
 	}
 	else if(aux == root && !aux->getRight()) {
